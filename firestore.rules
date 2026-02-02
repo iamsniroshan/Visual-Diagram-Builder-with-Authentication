@@ -18,9 +18,10 @@ service cloud.firestore {
       return isAuthenticated() && getUserRole() == 'editor';
     }
     
-    // Users collection - users can only read their own data
+    // Users collection
     match /users/{userId} {
-      allow read: if isAuthenticated() && request.auth.uid == userId;
+      // Allow all authenticated users to read user emails (for sharing diagrams)
+      allow read: if isAuthenticated();
       // Allow user to create their own document during registration
       allow create: if isAuthenticated() && request.auth.uid == userId;
       // Prevent updates after creation for security

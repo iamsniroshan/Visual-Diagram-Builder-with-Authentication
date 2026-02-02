@@ -3,7 +3,7 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut 
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import type { UserData } from '../types';
 
@@ -35,5 +35,10 @@ export const authService = {
       return userDoc.data() as UserData;
     }
     return null;
+  },
+
+  async getAllUsers(): Promise<UserData[]> {
+    const usersSnapshot = await getDocs(collection(db, 'users'));
+    return usersSnapshot.docs.map(doc => doc.data() as UserData);
   },
 };

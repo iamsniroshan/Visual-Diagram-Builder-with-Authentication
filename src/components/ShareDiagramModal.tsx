@@ -1,16 +1,38 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
+import { authService } from '../services/authService';
+import type { UserData } from '../types';
 
 interface ShareDiagramModalProps {
   onClose: () => void;
   onShare: (email: string, access: 'view' | 'edit') => Promise<void>;
+  currentUserEmail: string;
 }
 
-export default function ShareDiagramModal({ onClose, onShare }: ShareDiagramModalProps) {
+export default function ShareDiagramModal({ onClose, onShare, currentUserEmail }: ShareDiagramModalProps) {
   const [email, setEmail] = useState('');
   const [access, setAccess] = useState<'view' | 'edit'>('view');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [users, setUsers] = useState<UserData[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const allUsers = await authService.getAllUsers();
+        // Filter out current user
+        const otherUsers = allUsers.filter(u => u.email !== currentUserEmail);
+        setUsers(otherUsers);
+      } catch (err) {
+        console.error('Failed to fetch users:', err);
+        setError('Failed to load users. You can still enter an email manually.');
+      } finally {
+        setLoadingUsers(false);
+      }
+    }
+    fetchUsers();
+  }, [currentUserEmail]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -43,15 +65,34 @@ export default function ShareDiagramModal({ onClose, onShare }: ShareDiagramModa
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label htmlFor="share-email" className="block mb-2 font-medium text-[#213547] dark:text-[#e0e0e0]">User Email</label>
-            <input
-              type="email"
-              id="share-email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="user@example.com"
-              required
-              className="w-full p-3 border border-[#ddd] dark:border-[#444] rounded text-base bg-white dark:bg-[#2a2a2a] text-[#213547] dark:text-[#e0e0e0] focus:outline-none focus:border-[#667eea] focus:shadow-[0_0_0_3px_rgba(102,126,234,0.1)]"
-            />
+            {loadingUsers ? (
+              <div className="text-[#666] dark:text-[#999] text-sm">Loading users...</div>
+            ) : users.length > 0 ? (
+              <select
+                id="share-email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full p-3 border border-[#ddd] dark:border-[#444] rounded text-base bg-white dark:bg-[#2a2a2a] text-[#213547] dark:text-[#e0e0e0] focus:outline-none focus:border-[#667eea] focus:shadow-[0_0_0_3px_rgba(102,126,234,0.1)]"
+              >
+                <option value="">Select a user...</option>
+                {users.map((user) => (
+                  <option key={user.email} value={user.email}>
+                    {user.email} ({user.role})
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="email"
+                id="share-email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="user@example.com"
+                required
+                className="w-full p-3 border border-[#ddd] dark:border-[#444] rounded text-base bg-white dark:bg-[#2a2a2a] text-[#213547] dark:text-[#e0e0e0] focus:outline-none focus:border-[#667eea] focus:shadow-[0_0_0_3px_rgba(102,126,234,0.1)]"
+              />
+            )}
           </div>
           
           <div className="mb-6">

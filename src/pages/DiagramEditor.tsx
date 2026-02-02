@@ -304,6 +304,7 @@ export default function DiagramEditor() {
         <ShareDiagramModal
           onClose={() => setShowShareModal(false)}
           onShare={handleShare}
+          currentUserEmail={user?.email || ''}
         />
       )}
     </div>
