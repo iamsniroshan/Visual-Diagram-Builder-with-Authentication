@@ -4,13 +4,12 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import DiagramEditor from './pages/DiagramEditor';
 import Profile from './pages/Profile';
-import './App.css';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="flex justify-center items-center min-h-screen text-2xl text-[#667eea]">Loading...</div>;
   }
 
   return user ? <>{children}</> : <Navigate to="/login" />;
@@ -20,7 +19,7 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="flex justify-center items-center min-h-screen text-2xl text-[#667eea]">Loading...</div>;
   }
 
   return user ? <Navigate to="/dashboard" /> : <>{children}</>;

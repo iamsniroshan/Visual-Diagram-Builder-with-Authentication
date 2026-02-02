@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import ThemeToggle from './ThemeToggle';
-import './Header.css';
 
 interface HeaderProps {
   title?: string;
@@ -17,7 +16,7 @@ export default function Header({
   backTo = '/dashboard',
   rightContent 
 }: HeaderProps) {
-  const { user, userData, logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -44,34 +43,34 @@ export default function Header({
   }
 
   return (
-    <header className="common-header">
-      <div className="header-left">
+    <header className="sticky top-0 flex justify-between items-center px-6 py-3 bg-white dark:bg-[#242424] shadow-[0_1px_4px_rgba(0,0,0,0.1)] dark:shadow-[0_1px_4px_rgba(0,0,0,0.3)] gap-3 z-[1000]">
+      <div className="flex items-center gap-3 flex-1">
         {showBackButton && (
-          <button onClick={() => navigate(backTo)} className="btn-back">
+          <button onClick={() => navigate(backTo)} className="px-4 py-2 bg-white dark:bg-[#242424] text-[#667eea] border-2 border-[#667eea] rounded-md font-semibold cursor-pointer transition-all whitespace-nowrap text-sm hover:bg-[#667eea] hover:text-white hover:-translate-y-0.5">
             ← Back
           </button>
         )}
-        {title && <h1 className="header-title">{title}</h1>}
+        {title && <h1 className="m-0 text-[#213547] dark:text-[#e0e0e0] text-2xl font-semibold">{title}</h1>}
       </div>
 
-      <div className="header-center">
+      <div className="flex items-center gap-3 flex-1 justify-center">
         {rightContent}
       </div>
 
-      <div className="header-right">
+      <div className="flex items-center gap-3 flex-1 justify-end">
         <ThemeToggle />
         
-        <div className="profile-dropdown-container" ref={dropdownRef}>
+        <div className="relative" ref={dropdownRef}>
           <button 
-            className="profile-trigger"
+            className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-[#242424] border-2 border-[rgba(102,126,234,0.2)] rounded-lg cursor-pointer transition-all text-[#213547] dark:text-[#e0e0e0] hover:border-[#667eea] hover:shadow-[0_2px_8px_rgba(102,126,234,0.2)]"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <div className="profile-avatar-small">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white flex justify-center items-center text-xs font-bold">
               {user?.email?.charAt(0).toUpperCase()}
             </div>
-            <span className="user-email-display">{user?.email}</span>
+            <span className="text-sm">{user?.email}</span>
             <svg 
-              className={`dropdown-arrow ${showDropdown ? 'open' : ''}`}
+              className={`transition-transform ${showDropdown ? 'rotate-180' : ''}`}
               width="12" 
               height="12" 
               viewBox="0 0 12 12"
@@ -81,23 +80,20 @@ export default function Header({
           </button>
 
           {showDropdown && (
-            <div className="profile-dropdown-menu">
-              <div className="dropdown-header">
-                <div className="profile-avatar-medium">
+            <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-[#242424] rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.15)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)] border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)] overflow-hidden">
+              <div className="p-4 border-b border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)]">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white flex justify-center items-center text-sm font-bold mb-2">
                   {user?.email?.charAt(0).toUpperCase()}
                 </div>
-                <div className="dropdown-user-info">
-                  <p className="dropdown-email">{user?.email}</p>
-                  <span className={`role-badge ${userData?.role}`}>
-                    {userData?.role || 'viewer'}
-                  </span>
+                <div>
+                  <p className="text-sm text-[#213547] dark:text-[#e0e0e0] break-all">{user?.email}</p>
                 </div>
               </div>
 
-              <div className="dropdown-divider"></div>
+              <div className="my-1"></div>
 
               <button 
-                className="dropdown-item"
+                className="w-full flex items-center gap-3 px-4 py-3 bg-transparent border-none cursor-pointer text-left text-[#213547] dark:text-[#e0e0e0] transition-colors hover:bg-[#f5f5f5] dark:hover:bg-[#333]"
                 onClick={() => {
                   setShowDropdown(false);
                   navigate('/dashboard');
@@ -110,7 +106,7 @@ export default function Header({
               </button>
 
               <button 
-                className="dropdown-item"
+                className="w-full flex items-center gap-3 px-4 py-3 bg-transparent border-none cursor-pointer text-left text-[#213547] dark:text-[#e0e0e0] transition-colors hover:bg-[#f5f5f5] dark:hover:bg-[#333]"
                 onClick={() => {
                   setShowDropdown(false);
                   navigate('/profile');
@@ -122,10 +118,10 @@ export default function Header({
                 Profile
               </button>
 
-              <div className="dropdown-divider"></div>
+              <div className="my-1"></div>
 
               <button 
-                className="dropdown-item logout"
+                className="w-full flex items-center gap-3 px-4 py-3 bg-transparent border-none cursor-pointer text-left text-[#dc3545] transition-colors hover:bg-[#fee] dark:hover:bg-[#4a1f1f]"
                 onClick={() => {
                   setShowDropdown(false);
                   handleLogout();

@@ -25,7 +25,6 @@ import ShareDiagramModal from '../components/ShareDiagramModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { diagramService } from '../services/diagramService';
 import type { SharedUser } from '../types';
-import '../styles/DiagramEditor.css';
 
 let nodeId = 0;
 
@@ -190,25 +189,25 @@ export default function DiagramEditor() {
   }
 
   return (
-    <div className="editor-container">
+    <div className="flex flex-col h-screen bg-[#f8f9fa] dark:bg-[#2a2a2a] p-8 pb-0">
       <Header 
         title={diagramName}
         showBackButton={true}
         backTo="/dashboard"
         rightContent={
           <>
-            <span className="role-badge">{userData?.role}</span>
+            <span className="px-4 py-2 bg-[rgba(102,126,234,0.1)] text-[#667eea] rounded-[20px] text-sm font-semibold capitalize">{userData?.role}</span>
             {isEditor && (
               <>
                 {isOwner && (
-                  <button onClick={() => setShowShareModal(true)} className="btn-share">
+                  <button onClick={() => setShowShareModal(true)} className="px-4 py-2 bg-[#17a2b8] text-white border-none rounded-md font-semibold cursor-pointer transition-colors hover:bg-[#138496]">
                     Share
                   </button>
                 )}
-                <button onClick={addNode} className="btn-add-node">
+                <button onClick={addNode} className="px-4 py-2 bg-[#28a745] text-white border-none rounded-md font-semibold cursor-pointer transition-colors hover:bg-[#218838]">
                   + Add Node
                 </button>
-                <button onClick={saveDiagram} disabled={saving} className="btn-save">
+                <button onClick={saveDiagram} disabled={saving} className="px-6 py-2 bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white border-none rounded-md font-semibold cursor-pointer transition-transform hover:enabled:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed">
                   {saving ? 'Saving...' : 'Save'}
                 </button>
               </>
@@ -217,7 +216,7 @@ export default function DiagramEditor() {
         }
       />
 
-      <div className="flow-wrapper">
+      <div className="flex-1 relative w-full h-full">
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -236,24 +235,24 @@ export default function DiagramEditor() {
         </ReactFlow>
 
         {!isEditor && (
-          <div className="viewer-overlay">
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 bg-[rgba(255,152,0,0.9)] text-white px-6 py-3 rounded-lg font-semibold z-10 shadow-[0_4px_12px_rgba(0,0,0,0.2)]">
             <p>View Only Mode</p>
           </div>
         )}
       </div>
 
       {isEditor && (
-        <div className="editor-sidebar">
-          <h3>Selected Items</h3>
-          <div className="node-list">
+        <div className="fixed right-8 top-1/2 -translate-y-1/2 w-[300px] max-h-[calc(100vh-200px)] bg-white dark:bg-[#242424] p-6 overflow-y-auto rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.3)] z-[100] backdrop-blur-[10px] border border-[rgba(102,126,234,0.2)]">
+          <h3 className="m-0 mb-4 text-[#213547] dark:text-[#e0e0e0] text-base font-semibold border-b-2 border-[rgba(102,126,234,0.2)] pb-2">Selected Items</h3>
+          <div className="flex flex-col gap-2 mb-8">
             {nodes.map((node) => (
-              <div key={node.id} className="node-item">
-                <span>{node.data.label as string}</span>
-                <div className="node-item-actions">
-                  <button onClick={() => startEditingNode(node)} className="btn-edit">
+              <div key={node.id} className="flex justify-between items-center p-3 bg-[rgba(102,126,234,0.05)] rounded-md text-sm text-[#213547] dark:text-[#e0e0e0] border border-[rgba(102,126,234,0.1)] transition-all gap-2 hover:bg-[rgba(102,126,234,0.1)] hover:border-[rgba(102,126,234,0.3)]">
+                <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{node.data.label as string}</span>
+                <div className="flex gap-2 flex-shrink-0">
+                  <button onClick={() => startEditingNode(node)} className="px-2 py-1 bg-[#667eea] text-white border-none rounded text-xs cursor-pointer transition-colors hover:bg-[#5568d3]">
                     Edit
                   </button>
-                  <button onClick={() => deleteNode(node.id)} className="btn-delete-small">
+                  <button onClick={() => deleteNode(node.id)} className="px-2 py-1 bg-[#dc3545] text-white border-none rounded text-xs cursor-pointer transition-colors hover:bg-[#c82333]">
                     Delete
                   </button>
                 </div>
@@ -261,14 +260,14 @@ export default function DiagramEditor() {
             ))}
           </div>
 
-          <h3>Edges ({edges.length})</h3>
-          <div className="edge-list">
+          <h3 className="m-0 mb-4 text-[#213547] dark:text-[#e0e0e0] text-base font-semibold border-b-2 border-[rgba(102,126,234,0.2)] pb-2">Edges ({edges.length})</h3>
+          <div className="flex flex-col gap-2 mb-8">
             {edges.map((edge) => (
-              <div key={edge.id} className="edge-item">
-                <span>
+              <div key={edge.id} className="flex justify-between items-center p-3 bg-[rgba(102,126,234,0.05)] rounded-md text-sm text-[#213547] dark:text-[#e0e0e0] border border-[rgba(102,126,234,0.1)] transition-all gap-2 hover:bg-[rgba(102,126,234,0.1)] hover:border-[rgba(102,126,234,0.3)]">
+                <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
                   {edge.source} → {edge.target}
                 </span>
-                <button onClick={() => deleteEdge(edge.id)} className="btn-delete-small">
+                <button onClick={() => deleteEdge(edge.id)} className="px-2 py-1 bg-[#dc3545] text-white border-none rounded text-xs cursor-pointer transition-colors hover:bg-[#c82333]">
                   Delete
                 </button>
               </div>
@@ -278,9 +277,9 @@ export default function DiagramEditor() {
       )}
 
       {editingNodeId && (
-        <div className="modal-overlay" onClick={() => setEditingNodeId(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Edit Node Label</h2>
+        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 flex justify-center items-center z-[1000]" onClick={() => setEditingNodeId(null)}>
+          <div className="bg-white dark:bg-[#242424] p-8 rounded-xl w-[90%] max-w-[400px] shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.3)]" onClick={(e) => e.stopPropagation()}>
+            <h2 className="m-0 mb-6 text-[#213547] dark:text-[#e0e0e0]">Edit Node Label</h2>
             <input
               type="text"
               value={editingLabel}
@@ -288,12 +287,13 @@ export default function DiagramEditor() {
               placeholder="Enter node label"
               autoFocus
               onKeyPress={(e) => e.key === 'Enter' && saveNodeLabel()}
+              className="w-full p-3 border-2 border-[#ddd] dark:border-[#444] rounded-md text-base mb-6 bg-white dark:bg-[#2a2a2a] text-[#213547] dark:text-[#e0e0e0] focus:outline-none focus:border-[#667eea]"
             />
-            <div className="modal-actions">
-              <button onClick={() => setEditingNodeId(null)} className="btn-secondary">
+            <div className="flex gap-3 justify-end">
+              <button onClick={() => setEditingNodeId(null)} className="px-6 py-3 bg-white dark:bg-[#242424] text-[#667eea] border-2 border-[#667eea] rounded-md font-semibold cursor-pointer transition-all hover:bg-[#667eea] hover:text-white">
                 Cancel
               </button>
-              <button onClick={saveNodeLabel} className="btn-primary">
+              <button onClick={saveNodeLabel} className="px-6 py-3 bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white border-none rounded-md font-semibold cursor-pointer">
                 Save
               </button>
             </div>
