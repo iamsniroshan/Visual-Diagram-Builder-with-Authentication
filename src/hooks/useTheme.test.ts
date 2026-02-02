@@ -1,8 +1,13 @@
-import { describe, it, expect } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useTheme } from '../hooks/useTheme';
 
 describe('useTheme', () => {
+  beforeEach(() => {
+    // Clear localStorage and reset document attribute before each test
+    localStorage.clear();
+    document.documentElement.removeAttribute('data-theme');
+  });
   it('should initialize with light theme by default', () => {
     const { result } = renderHook(() => useTheme());
     expect(result.current.theme).toBe('light');
@@ -42,10 +47,10 @@ describe('useTheme', () => {
     expect(localStorage.getItem('theme')).toBe('dark');
   });
 
-  it('should set data-theme attribute on document root', () => {
+  it('should set data-theme attribute on document root', async () => {
     const { result } = renderHook(() => useTheme());
     
-    act(() => {
+    await act(async () => {
       result.current.toggleTheme();
     });
     

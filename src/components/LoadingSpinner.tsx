@@ -1,10 +1,3 @@
-import { ReactNode } from 'react';
-
-interface PrivateRouteProps {
-  children: ReactNode;
-  loading?: boolean;
-}
-
 export default function LoadingSpinner({ message = 'Loading...' }: { message?: string }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">

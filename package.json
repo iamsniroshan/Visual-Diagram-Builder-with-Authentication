@@ -15,6 +15,7 @@
   "dependencies": {
     "@dataconnect/generated": "file:src/dataconnect-generated",
     "@tailwindcss/postcss": "^4.1.18",
+    "@vitest/coverage-v8": "^4.0.18",
     "@xyflow/react": "^12.10.0",
     "firebase": "^12.8.0",
     "react": "^19.2.0",

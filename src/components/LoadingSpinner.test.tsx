@@ -15,7 +15,7 @@ describe('LoadingSpinner', () => {
 
   it('should have spinner element', () => {
     const { container } = render(<LoadingSpinner />);
-    const spinner = container.querySelector('.spinner');
+    const spinner = container.querySelector('.animate-spin');
     expect(spinner).toBeInTheDocument();
   });
 });
