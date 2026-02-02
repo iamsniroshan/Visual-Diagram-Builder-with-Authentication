@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to get user role
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    // Helper function to check if user is editor
+    function isEditor() {
+      return isAuthenticated() && getUserRole() == 'editor';
+    }
+    
+    // Users collection - users can only read their own data
+    match /users/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if false; // Only allow writes through admin SDK or during registration
+    }
+    
+    // Diagrams collection
+    match /diagrams/{diagramId} {
+      // Read: Owner or shared user
+      allow read: if isAuthenticated() && (
+        resource.data.createdBy == request.auth.uid ||
+        request.auth.uid in resource.data.sharedWith
+      );
+      
+      // Create: Only editors can create new diagrams
+      allow create: if isEditor() && 
+        request.resource.data.createdBy == request.auth.uid;
+      
+      // Update: Only owner or users with edit access can update
+      allow update: if isAuthenticated() && (
+        resource.data.createdBy == request.auth.uid ||
+        (request.auth.uid in resource.data.sharedWith && isEditor())
+      );
+      
+      // Delete: Only owner can delete
+      allow delete: if isAuthenticated() && 
+        resource.data.createdBy == request.auth.uid;
+    }
+  }
+}
