@@ -42,7 +42,7 @@ export default function Login() {
   }
 
   return (
-    <div className="relative flex justify-center items-center min-h-screen bg-gradient-to-br from-[#667eea] to-[#764ba2]">
+    <div className="relative flex justify-center items-center min-h-screen">
       <div className="absolute top-6 right-6">
         <ThemeToggle />
       </div>

@@ -5,12 +5,13 @@ export default function ThemeToggle() {
 
   return (
     <button 
-      className="bg-transparent border-2 border-[#ddd] dark:border-[#555] rounded-full w-10 h-10 flex items-center justify-center cursor-pointer text-xl transition-all duration-300 hover:scale-110 hover:border-[#007bff] dark:hover:border-[#4a9eff] active:scale-95" 
+      className="relative bg-gradient-to-r from-blue-500 to-purple-600 dark:from-indigo-600 dark:to-purple-700 text-white rounded-lg px-4 py-2 flex items-center justify-center gap-2 cursor-pointer font-medium shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95" 
       onClick={toggleTheme}
       aria-label="Toggle theme"
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
-      {theme === 'light' ? '🌙' : '☀️'}
+      <span className="text-lg">{theme === 'light' ? '🌙' : '☀️'}</span>
+      <span className="text-sm">{theme === 'light' ? 'Dark' : 'Light'}</span>
     </button>
   );
 }

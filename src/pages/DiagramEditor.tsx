@@ -189,14 +189,13 @@ export default function DiagramEditor() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-[#f8f9fa] dark:bg-[#2a2a2a] p-8 pb-0">
+    <div className="flex flex-col h-screen bg-[#f8f9fa] dark:bg-[#2a2a2a] p-0 pb-0">
       <Header 
         title={diagramName}
         showBackButton={true}
         backTo="/dashboard"
         rightContent={
           <>
-            <span className="px-4 py-2 bg-[rgba(102,126,234,0.1)] text-[#667eea] rounded-[20px] text-sm font-semibold capitalize">{userData?.role}</span>
             {isEditor && (
               <>
                 {isOwner && (

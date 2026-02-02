@@ -57,7 +57,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#2a2a2a] p-8">
+    <div className="min-h-screen bg-[#f8f9fa] dark:bg-[#2a2a2a] p-0">
       <Header 
         title="My Diagrams"
         rightContent={
@@ -69,7 +69,7 @@ export default function Dashboard() {
         }
       />
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 m-4">
         {diagrams.length === 0 ? (
           <div className="col-span-full text-center py-16 px-8 text-[#213547] dark:text-[#e0e0e0] opacity-60 text-lg">
             <p>No diagrams yet. {userData?.role === 'editor' ? 'Create your first diagram to get started!' : 'You have view-only access.'}</p>

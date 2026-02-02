@@ -43,7 +43,7 @@ export default function Header({
   }
 
   return (
-    <header className="sticky top-0 flex justify-between items-center px-6 py-3 bg-white dark:bg-[#242424] shadow-[0_1px_4px_rgba(0,0,0,0.1)] dark:shadow-[0_1px_4px_rgba(0,0,0,0.3)] gap-3 z-[1000]">
+    <header className="sticky top-0 flex justify-between items-center px-6 py-3 bg-white dark:bg-[#242424] shadow-[0_1px_4px_rgba(0,0,0,0.1)] dark:shadow-[0_1px_4px_rgba(0,0,0,0.3)] gap-3 z-[1000] mb-4">
       <div className="flex items-center gap-3 flex-1">
         {showBackButton && (
           <button onClick={() => navigate(backTo)} className="px-4 py-2 bg-white dark:bg-[#242424] text-[#667eea] border-2 border-[#667eea] rounded-md font-semibold cursor-pointer transition-all whitespace-nowrap text-sm hover:bg-[#667eea] hover:text-white hover:-translate-y-0.5">
